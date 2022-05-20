@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MoviesListVC" customModule="MoviesApp" customModuleProvider="target">
+            <connections>
+                <outlet property="searchText" destination="aE1-Wx-8jn" id="3ag-Ub-nkL"/>
+                <outlet property="tableView" destination="iDl-EO-9O0" id="SaK-4R-QVZ"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eXC-dx-rDF">
+                    <rect key="frame" x="20" y="64" width="374" height="54"/>
+                    <subviews>
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aE1-Wx-8jn">
+                            <rect key="frame" x="10" y="10" width="354" height="34"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemGray6Color"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="aE1-Wx-8jn" secondAttribute="bottom" constant="10" id="0Dj-0g-hBZ"/>
+                        <constraint firstItem="aE1-Wx-8jn" firstAttribute="leading" secondItem="eXC-dx-rDF" secondAttribute="leading" constant="10" id="UhO-Lf-vBs"/>
+                        <constraint firstAttribute="trailing" secondItem="aE1-Wx-8jn" secondAttribute="trailing" constant="10" id="hgM-k9-mIS"/>
+                        <constraint firstItem="aE1-Wx-8jn" firstAttribute="top" secondItem="eXC-dx-rDF" secondAttribute="top" constant="10" id="sTo-sT-RCb"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="iDl-EO-9O0">
+                    <rect key="frame" x="0.0" y="128" width="414" height="734"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="eXC-dx-rDF" secondAttribute="trailing" constant="20" id="6wD-2b-Sts"/>
+                <constraint firstItem="eXC-dx-rDF" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="C41-a1-Pdk"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="iDl-EO-9O0" secondAttribute="bottom" id="N0m-nL-wox"/>
+                <constraint firstItem="eXC-dx-rDF" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="cZF-yb-ZVa"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="iDl-EO-9O0" secondAttribute="trailing" id="j9Z-Xk-8DI"/>
+                <constraint firstItem="iDl-EO-9O0" firstAttribute="top" secondItem="eXC-dx-rDF" secondAttribute="bottom" constant="10" id="kUu-wl-1fC"/>
+                <constraint firstItem="iDl-EO-9O0" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="qgi-Bh-Rg5"/>
+            </constraints>
+            <point key="canvasLocation" x="139" y="119"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
