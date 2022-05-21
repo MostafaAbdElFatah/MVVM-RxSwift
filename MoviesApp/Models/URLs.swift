@@ -18,7 +18,7 @@ enum URLs {
     
     private static let flickrRootURL = "https://www.flickr.com/services/rest/";
     
-    public static func flickrURL(page:Int = 1, perPage:Int = 20) -> String{
+    public static func moviesListURL(page:Int = 1, perPage:Int = 20) -> String{
         "\(flickrRootURL)?method=flickr.photos.search&format=json&nojsoncallback=50&text=Color&page=\(page)&per_page=\(perPage)&api_key=\(Keys.flickerAPIKey)"
     }
 }

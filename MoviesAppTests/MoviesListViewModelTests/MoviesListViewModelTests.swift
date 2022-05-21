@@ -18,7 +18,7 @@ class MoviesListViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         apisManagerMock = MoviesAPIsManagerMock()
-        sut = MoviesListViewModel(networkManger: apisManagerMock)
+        sut = MoviesListViewModel(apisManager: apisManagerMock)
     }
     
     override func tearDown() {
@@ -70,7 +70,7 @@ class MoviesListViewModelTests: XCTestCase {
         sut.fetchMoviesList()
         
         //Then
-        apisManagerMock.fetchSucces()
+        apisManagerMock.fetchSuccess()
         state = try! sut.state.value()
         XCTAssertEqual(state, .fetched)
     }
@@ -95,4 +95,54 @@ class MoviesListViewModelTests: XCTestCase {
         }
     }
     
+    // MARK: - testPhotoCellTapped -
+    func testPhotoCellTapped(){
+        // Given:
+        guard let response = MoviesGenerator().moviesPhotos() else {
+            XCTFail("Failed to generate photos")
+            return
+        }
+        
+        
+        let indexPath = IndexPath(row: 3, section: 0)
+        apisManagerMock.response = response
+
+        sut.fetchMoviesList()
+        apisManagerMock.fetchSuccess()
+        
+        //When:
+        sut.cellSelected(indexPath: indexPath)
+        
+        //Then:
+        let selectedPhoto = try! sut.selectedPhoto.value()
+        let selectedAdBannerLink = try! sut.selectedLink.value()
+        XCTAssertNotNil(selectedPhoto)
+        XCTAssertNil(selectedAdBannerLink)
+    }
+    
+    
+    // MARK: - testAdBannerCellTapped -
+    func testAdBannerCellTapped(){
+        // Given:
+        guard let response = MoviesGenerator().moviesPhotos() else {
+            XCTFail("Failed to generate photos")
+            return
+        }
+        
+        //adBanner in five row
+        let indexPath = IndexPath(row: 4, section: 0)
+        apisManagerMock.response = response
+
+        sut.fetchMoviesList()
+        apisManagerMock.fetchSuccess()
+        
+        //When:
+        sut.cellSelected(indexPath: indexPath)
+        
+        //Then:
+        let selectedPhoto = try! sut.selectedPhoto.value()
+        let selectedAdBannerLink = try! sut.selectedLink.value()
+        XCTAssertNil(selectedPhoto)
+        XCTAssertNotNil(selectedAdBannerLink)
+    }
 }

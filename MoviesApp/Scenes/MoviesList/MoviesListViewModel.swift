@@ -20,53 +20,35 @@ public enum State: Equatable {
 final class MoviesListViewModel {
 
     // MARK: - Public properties -
-    public var searchText = BehaviorSubject<String>(value: "")
-    public var state = BehaviorSubject<State>(value: .empty)
     public var movies = BehaviorSubject<[Any]>(value: [])
+    public var state = BehaviorSubject<State>(value: .empty)
+    public var searchText = BehaviorSubject<String>(value: "")
+    public var selectedLink = BehaviorSubject<String?>(value: nil)
+    public var selectedPhoto = BehaviorSubject<Photo?>(value: nil)
     
     // MARK: - Private properties -
     private var currentPage:Int = 1
     private var totalPages:Int = 1
     private var allMovies:[Photo] = []
     private var disposeBag = DisposeBag()
-    private var networkManager:MoviesAPIsManagerProtocol
+    private var apisManager:MoviesAPIsManagerProtocol
     
     // MARK: - Init -
-    init(networkManger:MoviesAPIsManagerProtocol = MoviesAPIsManager() ){
-        self.networkManager = networkManger
+    init(apisManager:MoviesAPIsManagerProtocol = MoviesAPIsManager() ){
+        self.apisManager = apisManager
         searchText.bind { [weak self] (text) in
             guard let self = self else { return }
             if text.isBlank { return }
             self.searchingDidChanged(text: text)
         }.disposed(by: disposeBag)
+        selectedLink.bind{ [weak self] url in
+            guard let self = self else { return }
+            guard let url = url else { return }
+            self.openLink(url)
+        }.disposed(by: disposeBag)
     }
     
-    // MARK: - fetchMovies -
-    func createCellDispaly(photo:Photo) -> MovieDisplay {
-        MovieDisplay(movie: photo)
-    }
-
-    func openAdBanner() {
-        openLink("https://www.getkoinz.com/")
-    }
-    
-    private func openLink(_ link:String){
-        let application = UIApplication.shared
-        guard let url = URL(string: link) else { return }
-        application.open( url, options: [:])
-    }
-    
-    func isBanner(row:Int)-> Bool {
-        guard let moviesList = try? self.movies.value() else { return false }
-        return moviesList[row] is String
-    }
-    
-    func object(at row:Int) -> Photo?{
-        guard let moviesList = try? self.movies.value() else { return nil }
-        return moviesList[row] as? Photo
-    }
-    
-    
+    // MARK: - searchingDidChanged -
     func searchingDidChanged(text:String){
         let filterList = allMovies.filter({ $0.title.contains(text)})
         //inject adBanner every five item
@@ -81,34 +63,73 @@ final class MoviesListViewModel {
             return
         }
         
+        let urlString = URLs.moviesListURL(page: currentPage)
+        guard let url = URL(string: urlString) else {
+            state.onNext(.error(NetworkAPIError.invalidURL.localizedDescription))
+            return
+        }
+        
         if let currentState = try? state.value(), case .empty = currentState {
             state.onNext(.loading)
         }
         
-        let urlString = URLs.flickrURL(page: currentPage)
-        
-        guard let url = URL(string: urlString) else {
-            self.state.onNext(.error(NetworkAPIError.invalidURL.localizedDescription))
-            return
-        }
-        
-        networkManager.fetchMovies(from: url) {[weak self] result in
+        apisManager.fetchMovies(from: url) { [weak self] result in
             guard let self = self else { return }
+            self.state.onNext(.fetched)
+            
             switch result {
             case .success(let response):
                 self.state.onNext(.fetched)
                 self.totalPages = response.photosList.pages
                 self.currentPage = response.photosList.page + 1
-                self.allMovies.append(contentsOf: response.photosList.photos)
-                //inject adBanner every five item
-                let moviesList = self.allMovies.injectAdBanners()
-                self.movies.onNext(moviesList)
+                guard var moviesList = try? self.movies.value() else { return }
+                moviesList.append(contentsOf: response.photosList.photos)
+                moviesList = moviesList.filter({ $0 is Photo })
+                
+                // inject ad banners between movies
+                let list = moviesList.injectAdBanners()
+                
+                self.movies.onNext(list)
             case .failure(let error):
                 self.state.onNext(.error(error.localizedDescription))
             }
+            
         }
     }
+    
+    // MARK: - create movie cell display object -
+    func createCellDispaly(photo:Photo) -> MovieDisplay {
+        MovieDisplay(movie: photo)
+    }
 
+    // MARK: - isAdBanner cell at this row -
+    func isBanner(row:Int)-> Bool {
+        guard let moviesList = try? self.movies.value() else { return false }
+        return moviesList[row] is String
+    }
+    
+    // MARK: - get photo object at this row -
+    private func getPhoto(at row:Int) -> Photo?{
+        guard let moviesList = try? self.movies.value() else { return nil }
+        return moviesList[row] as? Photo
+    }
+    
+    // MARK: - cellSelected -
+    func cellSelected(indexPath:IndexPath){
+        if isBanner(row: indexPath.row) {
+            //open adBanner link
+            selectedLink.onNext("https://www.getkoinz.com/")
+        }else{
+            // move to movie details with selected photo
+            selectedPhoto.onNext(getPhoto(at: indexPath.row))
+        }
+    }
+    
+    private func openLink(_ link:String){
+        let application = UIApplication.shared
+        guard let url = URL(string: link) else { return }
+        application.open( url, options: [:])
+    }
 }
 
 // MARK: - Extensions -

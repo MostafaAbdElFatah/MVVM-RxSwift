@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06143EBF2838F5A900B27E38 /* MoviesGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06143EBE2838F5A900B27E38 /* MoviesGenerator.swift */; };
 		0615C21F2834BA2200478EA5 /* MoviesAPIsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0615C21E2834BA2200478EA5 /* MoviesAPIsManagerTests.swift */; };
 		0615C2212834BAE500478EA5 /* movies.json in Resources */ = {isa = PBXBuildFile; fileRef = 0615C2202834BAE500478EA5 /* movies.json */; };
 		0615C2232834BB7100478EA5 /* Bundle+unitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0615C2222834BB7100478EA5 /* Bundle+unitTest.swift */; };
@@ -62,8 +63,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		06143EBE2838F5A900B27E38 /* MoviesGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesGenerator.swift; sourceTree = "<group>"; };
 		0615C21E2834BA2200478EA5 /* MoviesAPIsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesAPIsManagerTests.swift; sourceTree = "<group>"; };
-		0615C2202834BAE500478EA5 /* movies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = movies.json; sourceTree = "<group>"; };
+		0615C2202834BAE500478EA5 /* movies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = movies.json; path = "../New Group/movies.json"; sourceTree = "<group>"; };
 		0615C2222834BB7100478EA5 /* Bundle+unitTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+unitTest.swift"; sourceTree = "<group>"; };
 		0615C2262834E8A500478EA5 /* MovieDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsVC.swift; sourceTree = "<group>"; };
 		0615C2272834E8A500478EA5 /* MovieDetails.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieDetails.xib; sourceTree = "<group>"; };
@@ -137,11 +139,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0615C2242834CBA200478EA5 /* MoviesAPIsManagerTests */ = {
+		06143EC02838F5BE00B27E38 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				0615C2202834BAE500478EA5 /* movies.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		06143EC12838F61B00B27E38 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
 				0615C2222834BB7100478EA5 /* Bundle+unitTest.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		0615C2242834CBA200478EA5 /* MoviesAPIsManagerTests */ = {
+			isa = PBXGroup;
+			children = (
 				0615C21E2834BA2200478EA5 /* MoviesAPIsManagerTests.swift */,
 			);
 			path = MoviesAPIsManagerTests;
@@ -162,6 +178,7 @@
 			children = (
 				0615C22D2834F4D100478EA5 /* MoviesListViewModelTests.swift */,
 				0615C22F2834F6F300478EA5 /* MoviesAPIsManagerProtocolMock.swift */,
+				06143EBE2838F5A900B27E38 /* MoviesGenerator.swift */,
 			);
 			path = MoviesListViewModelTests;
 			sourceTree = "<group>";
@@ -237,6 +254,8 @@
 			children = (
 				0615C2242834CBA200478EA5 /* MoviesAPIsManagerTests */,
 				0615C22C2834F4B400478EA5 /* MoviesListViewModelTests */,
+				06143EC12838F61B00B27E38 /* Extensions */,
+				06143EC02838F5BE00B27E38 /* Resources */,
 			);
 			path = MoviesAppTests;
 			sourceTree = "<group>";
@@ -655,6 +674,7 @@
 				0615C22E2834F4D100478EA5 /* MoviesListViewModelTests.swift in Sources */,
 				0615C21F2834BA2200478EA5 /* MoviesAPIsManagerTests.swift in Sources */,
 				0615C2232834BB7100478EA5 /* Bundle+unitTest.swift in Sources */,
+				06143EBF2838F5A900B27E38 /* MoviesGenerator.swift in Sources */,
 				0615C2302834F6F300478EA5 /* MoviesAPIsManagerProtocolMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

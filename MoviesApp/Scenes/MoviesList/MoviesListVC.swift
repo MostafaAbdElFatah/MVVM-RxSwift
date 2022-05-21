@@ -122,11 +122,7 @@ class MoviesListVC: UIViewController {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         tableView.rx.itemSelected.subscribe(onNext:{ [weak self] indexPath in
             guard let self = self else { return }
-            if self.viewModel.isBanner(row: indexPath.row) {
-                self.viewModel.openAdBanner()
-            }else{
-                self.moveTo(photo: self.viewModel.object(at: indexPath.row))
-            }
+            self.viewModel.cellSelected(indexPath: indexPath)
         }).disposed(by: disposeBag)
         
 //        viewModel.movies.bind(to: tableView.rx.items(cellIdentifier: "MovieCell", cellType: MovieCell.self)){
