@@ -10,21 +10,14 @@ import RxSwift
 import Foundation
 
 
-public enum State: Equatable {
-    case empty
-    case loading
-    case fetched
-    case error(String)
-}
-
 final class MoviesListViewModel {
 
     // MARK: - Public properties -
-    public var selectedLink = PublishSubject<String?>()
-    public var selectedPhoto = PublishSubject<Photo?>()
     public var movies = BehaviorSubject<[Any]>(value: [])
     public var state = BehaviorSubject<State>(value: .empty)
     public var searchText = BehaviorSubject<String>(value: "")
+    public var selectedPhoto = BehaviorSubject<Photo?>(value: nil)
+    public var selectedLink = BehaviorSubject<String?>(value: nil)
    
     
     // MARK: - Private properties -
@@ -32,10 +25,19 @@ final class MoviesListViewModel {
     private var totalPages:Int = 1
     private var allMovies:[Photo] = []
     private var disposeBag = DisposeBag()
+    private var dbManager:DBManagerProtocol
+    private var reachability:ReachabilityProtocol
     private var apisManager:MoviesAPIsManagerProtocol
     
     // MARK: - Init -
-    init(apisManager:MoviesAPIsManagerProtocol = MoviesAPIsManager() ){
+    init(apisManager:MoviesAPIsManagerProtocol = MoviesAPIsManager(),
+         dbManager:DBManagerProtocol = SQLManager(),
+         reachability:ReachabilityProtocol = Reachability()) {
+            
+        
+        self.dbManager = dbManager
+        self.apisManager = apisManager
+        self.reachability = reachability
         self.apisManager = apisManager
         searchText.bind { [weak self] (text) in
             guard let self = self else { return }
@@ -44,6 +46,7 @@ final class MoviesListViewModel {
         }.disposed(by: disposeBag)
         selectedLink.bind{ [weak self] url in
             guard let self = self else { return }
+            guard let url = url else { return  }
             self.openLink(url ?? "")
         }.disposed(by: disposeBag)
     }
@@ -58,6 +61,30 @@ final class MoviesListViewModel {
     
     // MARK: - fetchMovies -
     func fetchMoviesList() {
+        if reachability.isConnectedToNetwork() {
+            fetchMoviesListFromAPIs()
+        }else{
+            fetchMoviesListFromDB()
+        }
+    }
+    
+    // MARK: - fetchMoviesListFromDB -
+    private func fetchMoviesListFromDB(){
+        self.state.onNext(.fetched)
+        totalPages += 1
+        currentPage += 1
+        
+        guard var moviesList = try? self.movies.value() else { return }
+        moviesList.append(contentsOf: dbManager.fetchMoviesList(currentOffset: currentPage))
+        moviesList = moviesList.filter({ $0 is Photo })
+        // inject ad banners between movies
+        let list = moviesList.injectAdBanners()
+        self.movies.onNext(list)
+    }
+    
+    
+    // MARK: - fetchMoviesListFromAPIs -
+    private func fetchMoviesListFromAPIs(){
         if currentPage > totalPages {
             state.onNext(.fetched)
             return
@@ -86,6 +113,9 @@ final class MoviesListViewModel {
                 moviesList.append(contentsOf: response.photosList.photos)
                 moviesList = moviesList.filter({ $0 is Photo })
                 
+                //save movies
+                self.saveNewMovies(photos: moviesList)
+                
                 // inject ad banners between movies
                 let list = moviesList.injectAdBanners()
                 
@@ -95,6 +125,12 @@ final class MoviesListViewModel {
             }
             
         }
+    }
+    
+    // MARK: - save new Movies  -
+    private func saveNewMovies(photos:[Any]) {
+        guard let movies = photos as? [Photo] else { return }
+        dbManager.saveMovies(movies)
     }
     
     // MARK: - create movie cell display object -

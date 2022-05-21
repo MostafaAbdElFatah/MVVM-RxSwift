@@ -2,7 +2,7 @@
 //  MoviesAPIsManagerTests.swift
 //  MoviesAppTests
 //
-//  Created by Mostafa Abd ElFatah on 5/18/22.
+//  Created by Mostafa Abd ElFatah on 5/21/22.
 //
 
 import XCTest
@@ -10,13 +10,13 @@ import XCTest
 
 class MoviesAPIsManagerTests: XCTestCase {
 
-    var sut: MoviesAPIsManager!
+    var sut:MoviesAPIsManager!
     
     override func setUp() {
         super.setUp()
         sut = MoviesAPIsManager()
     }
-
+    
     override func tearDown() {
         sut = nil
         super.tearDown()
@@ -24,8 +24,9 @@ class MoviesAPIsManagerTests: XCTestCase {
     
     // MARK: - testFetchMovies -
     func testFetchMovies(){
-        // Given: Here, set up any values needed
-        let promise = XCTestExpectation(description: "Fetch Movies completed")
+        // Given:
+        let promise = XCTestExpectation(description:  "Fetch Movies completed")
+        
         var responseError:Error?
         var responseMovies:MoviesReponse?
         // When:
@@ -45,9 +46,10 @@ class MoviesAPIsManagerTests: XCTestCase {
             promise.fulfill()
         }
         wait(for: [promise], timeout: 1)
-        
         // Then:
         XCTAssertNil(responseError)
         XCTAssertNotNil(responseMovies)
     }
+    
+
 }

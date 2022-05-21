@@ -1,36 +1,32 @@
 //
-//  MoviesNetworkManagerMock.swift
+//  MoviesAPIsManagerProtocolMock.swift
 //  MoviesAppTests
 //
-//  Created by Mostafa Abd ElFatah on 5/18/22.
+//  Created by Mostafa Abd ElFatah on 5/21/22.
 //
 
 import Foundation
-
 @testable import MoviesApp
 
 
-class MoviesAPIsManagerMock:MoviesAPIsManagerProtocol{
+class MoviesAPIsManagerProtocolMock: MoviesAPIsManagerProtocol {
     
     var fetchMoviesIsCalled = false
     
-    var completionHandler: ((Result<MoviesReponse, NetworkAPIError>) -> Void)!
-    var response = MoviesReponse(photosList: PhotosList(page: 1, pages: 10, perpage: 20, total: 100, photos: []), stat: "")
-
+    var response:MoviesReponse!
+    var handler:((Result<MoviesReponse, NetworkAPIError>) -> Void)?
     
-    func fetchMovies(from url: URL, completionHandler: @escaping (Result<MoviesReponse, NetworkAPIError>) -> Void) {
+    func fetchMovies(from url: URL, completionHandler handler: @escaping (Result<MoviesReponse, NetworkAPIError>) -> Void) {
         fetchMoviesIsCalled = true
-        self.completionHandler = completionHandler
+        self.handler = handler
     }
     
-    
-    func fetchSuccess(){
-        completionHandler(.success(response))
+    func fetchSuccess() {
+        handler?(.success(response))
     }
     
-    func fetchFailure(error:NetworkAPIError){
-        completionHandler(.failure(error))
+    func fetchFailure(error:NetworkAPIError) {
+        handler?(.failure(error))
     }
-    
     
 }

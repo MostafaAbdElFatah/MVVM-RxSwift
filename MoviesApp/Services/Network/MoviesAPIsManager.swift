@@ -13,13 +13,6 @@ protocol MoviesAPIsManagerProtocol{
 }
 
 
-extension MoviesAPIsManagerProtocol{
-    func fetchMovies(from url:URL, completionHandler: @escaping (Result<MoviesReponse, NetworkAPIError>) -> Void){
-        fetchMovies(from: url, completionHandler: completionHandler)
-    }
-}
-
-
 class MoviesAPIsManager: MoviesAPIsManagerProtocol{
 
     func fetchMovies(from url:URL, completionHandler: @escaping (Result<MoviesReponse, NetworkAPIError>) -> Void) {
