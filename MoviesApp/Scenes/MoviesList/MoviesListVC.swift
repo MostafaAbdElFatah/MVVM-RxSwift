@@ -67,8 +67,9 @@ class MoviesListVC: UIViewController {
     
     func setupLayoutUI() {
         addDimView()
-        bindLoadingView()
         bindTableView()
+        bindNavigation()
+        bindLoadingView()
         bindSearchTextField()
         title = "Movies List"
         view.backgroundColor = .white
@@ -84,6 +85,13 @@ class MoviesListVC: UIViewController {
             .throttle(.seconds(5), scheduler: MainScheduler.instance)
             .bind(to: viewModel.searchText)
             .disposed(by: disposeBag)
+    }
+    
+    func bindNavigation() {
+        viewModel.selectedPhoto.bind{ [weak self]  photo in
+            guard let self = self else { return }
+            self.moveTo(photo: photo)
+        }.disposed(by: disposeBag)
     }
     
     func bindLoadingView()  {

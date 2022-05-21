@@ -20,11 +20,12 @@ public enum State: Equatable {
 final class MoviesListViewModel {
 
     // MARK: - Public properties -
+    public var selectedLink = PublishSubject<String?>()
+    public var selectedPhoto = PublishSubject<Photo?>()
     public var movies = BehaviorSubject<[Any]>(value: [])
     public var state = BehaviorSubject<State>(value: .empty)
     public var searchText = BehaviorSubject<String>(value: "")
-    public var selectedLink = BehaviorSubject<String?>(value: nil)
-    public var selectedPhoto = BehaviorSubject<Photo?>(value: nil)
+   
     
     // MARK: - Private properties -
     private var currentPage:Int = 1
@@ -43,8 +44,7 @@ final class MoviesListViewModel {
         }.disposed(by: disposeBag)
         selectedLink.bind{ [weak self] url in
             guard let self = self else { return }
-            guard let url = url else { return }
-            self.openLink(url)
+            self.openLink(url ?? "")
         }.disposed(by: disposeBag)
     }
     
