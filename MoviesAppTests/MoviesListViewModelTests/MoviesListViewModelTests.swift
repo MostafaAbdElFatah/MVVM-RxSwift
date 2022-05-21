@@ -48,38 +48,50 @@ class MoviesListViewModelTests: XCTestCase {
     }
     
     // MARK: - testFetchSuceess -
-    func testFetchSuceess() {
-        // Given
-        var state: State = .empty
+    func testFetchLoading() {
+        //Given:
+        var state:State = .empty
         
-        // When
+        //When:
         sut.fetchMoviesList()
-        state = try! sut.state.value()
-        XCTAssertEqual(state, State.loading)
-
-        // Then
-        apisManagerMock.fetchSuccess()
-        state = try! sut.state.value()
-        XCTAssertEqual(state, State.fetched)
         
+        //Then:
+        state = try! sut.state.value()
+        XCTAssertEqual(state, .loading)
+    }
+    
+    // MARK: - testFetchSuceess -
+    func testFetchSuceess() {
+        
+        //Given:
+        var state:State = .empty
+        
+        //When:
+        sut.fetchMoviesList()
+        
+        //Then
+        apisManagerMock.fetchSucces()
+        state = try! sut.state.value()
+        XCTAssertEqual(state, .fetched)
     }
     
     // MARK: - testFetchFailure -
     func testFetchFailure() {
-        // Given
-        let networkAPIError = NetworkAPIError.invalidData
         
-        // When
+        //Given:
+        let networkAPIError:NetworkAPIError = .invalidData
+        
+        //When:
         sut.fetchMoviesList()
         apisManagerMock.fetchFailure(error: networkAPIError)
-
-        // Then
-        let state = try? sut.state.value()
-        switch state{
+        
+        //Then:
+        let state:State = try! sut.state.value()
+        switch state {
         case .error(let error):
             XCTAssertEqual(error, networkAPIError.localizedDescription)
         default:
-            XCTFail("Error: fail test")
+            XCTFail("Error: Test failed")
         }
     }
     
